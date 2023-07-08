@@ -1,13 +1,16 @@
 package dev.abargdev.oracleone;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-    }
+import javax.swing.SwingUtilities;
+
+import dev.abargdev.oracleone.gui.ConversorWindow;
+
+public class App {
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				ConversorWindow view = new ConversorWindow();
+			}
+		});
+	}
 }
