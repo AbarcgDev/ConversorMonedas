@@ -7,13 +7,19 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import dev.abargdev.oracleone.model.CurrencyConversion;
+import dev.abargdev.oracleone.control.CurrencyConverterGuiCtl;
+import dev.abargdev.oracleone.model.conversors.*;
+import lombok.Setter;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.EnumSet;
 
+@Setter
 public class ConversorWindow extends JFrame {
   private JPanel textDisplays;
   private JPanel controlPanel;
@@ -24,8 +30,12 @@ public class ConversorWindow extends JFrame {
   private JButton makeConversion;
   private JLabel currencyToConvertLabel;
   private JLabel convertedCurrencyLabel;
+  private JLabel inputErrorMsg;
+  private CurrencyConverterGuiCtl controller;
+  private JLabel wellcomeMsg;
 
-  public ConversorWindow() {
+  public ConversorWindow(CurrencyConverterGuiCtl controller) {
+    this.controller = controller;
     setSize(400, 200);
     setResizable(false);
     setTitle("Conversor De Monedas");
@@ -44,8 +54,10 @@ public class ConversorWindow extends JFrame {
     menuBar = new JMenuBar();
     conversionType = new JMenu("Conversion Type");
     makeConversion = new JButton("Convert");
-    convertedCurrencyLabel = new JLabel("USD", JLabel.RIGHT);
-    currencyToConvertLabel = new JLabel("MXN", JLabel.RIGHT);
+    convertedCurrencyLabel = new JLabel("-*-", JLabel.RIGHT);
+    currencyToConvertLabel = new JLabel("-*-", JLabel.RIGHT);
+    inputErrorMsg = new JLabel("", JLabel.LEFT);
+    wellcomeMsg = new JLabel();
   }
 
   private void initializeComponents() {
@@ -57,7 +69,21 @@ public class ConversorWindow extends JFrame {
     convertedCurrency.setBackground(Color.WHITE);
     convertedCurrency.setFocusable(false);
 
+    inputErrorMsg.setForeground(Color.RED);
+    inputErrorMsg.setVisible(false);
+
     conversionType.setVisible(true);
+
+    makeConversion.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        controller.handleMakeConversionButtonEvent();
+      }
+
+    });
+
+    wellcomeMsg.setText("Bienvenido a mi conversor de Monedas");
   }
 
   private void buildLayout() {
@@ -67,6 +93,8 @@ public class ConversorWindow extends JFrame {
     pane.setLayout(new BorderLayout());
     pane.add(textDisplays, BorderLayout.CENTER);
     pane.add(controlPanel, BorderLayout.EAST);
+    pane.add(inputErrorMsg, BorderLayout.PAGE_END);
+    pane.add(wellcomeMsg, BorderLayout.PAGE_START);
   }
 
   private void buildInputPanel() {
@@ -84,7 +112,7 @@ public class ConversorWindow extends JFrame {
 
     constraints.gridy = 1;
     constraints.gridx = 0;
-    constraints.gridwidth = 10;
+    constraints.gridwidth = 3;
     textDisplays.add(convertedCurrencyLabel, constraints);
     constraints.gridx = 4;
     constraints.gridwidth = 100;
@@ -108,9 +136,46 @@ public class ConversorWindow extends JFrame {
   private void buildMenuBar() {
     EnumSet.allOf(CurrencyConversion.class).forEach(conversion -> {
       JMenuItem newMenuItem = new JMenuItem(conversion.toString(), conversion.getIndex());
-      // newMenuItem.addActionListener();
+      newMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          controller.handleConversionTypeMenuEvent(e);
+        }
+
+      });
       conversionType.add(newMenuItem);
     });
     menuBar.add(conversionType);
+  }
+
+  public String getInputFieldValue() {
+    return currencyToConvert.getText();
+  }
+
+  public void setInputFieldValue(String value) {
+    convertedCurrency.setText(value);
+  }
+
+  public void displayErrorMsg(String msg) {
+    inputErrorMsg.setText(msg);
+    inputErrorMsg.setVisible(true);
+  }
+
+  public void setOriginalCurrencyLabel(String label) {
+    currencyToConvertLabel.setText(label);
+  }
+
+  public void setConvertedCurrencyLabel(String label) {
+    convertedCurrencyLabel.setText(label);
+  }
+
+  public void clear() {
+    currencyToConvert.setText("");
+    convertedCurrency.setText("");
+  }
+
+  public void clearLog() {
+    inputErrorMsg.setVisible(false);
   }
 }

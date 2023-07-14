@@ -1,5 +1,9 @@
 dev/abargdev/oracleone/App.class
-dev/abargdev/oracleone/model/CurrencyConversion.class
-dev/abargdev/oracleone/gui/ConversorWindow.class
-dev/abargdev/oracleone/model/Currency.class
+dev/abargdev/oracleone/gui/ConversorWindow$2.class
+dev/abargdev/oracleone/model/conversors/CurrencyConversor.class
 dev/abargdev/oracleone/App$1.class
+dev/abargdev/oracleone/gui/ConversorWindow.class
+dev/abargdev/oracleone/model/currency/Currency.class
+dev/abargdev/oracleone/control/CurrencyConverterGuiCtl.class
+dev/abargdev/oracleone/model/conversors/CurrencyConversion.class
+dev/abargdev/oracleone/gui/ConversorWindow$1.class

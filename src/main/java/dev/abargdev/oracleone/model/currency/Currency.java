@@ -1,4 +1,4 @@
-package dev.abargdev.oracleone.model;
+package dev.abargdev.oracleone.model.currency;
 
 import java.util.EnumSet;
 import java.util.HashMap;
